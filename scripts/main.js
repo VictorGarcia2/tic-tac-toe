@@ -61,9 +61,10 @@ function ganadorModal(value) {
 }
 function quitModal() {
   modal.style = "display:none !important;"
-  score.textContent = 0
- score2.textContent = 0
   limpiarTablero()
+  score.textContent = 0
+  score2.textContent = 0
+  
   
 }
 function nextGame() {
