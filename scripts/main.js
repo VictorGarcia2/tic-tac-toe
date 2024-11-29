@@ -63,12 +63,11 @@ const score2 = document.querySelector('#score2')
 function quitModal() {
   modal.style = "display:none !important;"
   limpiarTablero()
-  score.textContent = 0
-  score2.textContent = 0
 }
 function nextGame() {
   modal.style = "display:none !important;"
   nextRoundGame()
+  limpiarTablero()
 }
 
 function turn(value){
@@ -85,9 +84,9 @@ function turn(value){
 const nextRound = document.querySelector('#nextRound')
 function nextRoundGame(value){
   if(value === false){
-   score.textContent = 1  
+   score.textContent += 1  
   } else { 
-    score2.textContent = 1
+    score2.textContent += 1
   }
 }
 turn()
