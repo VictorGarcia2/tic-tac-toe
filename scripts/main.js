@@ -3,8 +3,7 @@ const reinicio = document.querySelector("#restart");
 const boardItem = document.querySelectorAll(".board_item");
 let jugadorActual = true;
 const turnPlayer = document.querySelector('.turn')
-const score = document.querySelector('#score')
-const score2 = document.querySelector('#score2')
+
 let x = `<svg class="icon cross">
 <use xlink:href="./icons/icon-x.svg#icon-x"></use>
 </svg>`;
@@ -59,13 +58,13 @@ function ganadorModal(value) {
     document.querySelector('#winner').innerHTML = `<use class="icon circle" xlink:href="./icons/icon-o.svg#icon-o"></use>`
   }
 }
+const score = document.querySelector('#score')
+const score2 = document.querySelector('#score2')
 function quitModal() {
   modal.style = "display:none !important;"
   limpiarTablero()
   score.textContent = 0
   score2.textContent = 0
-  
-  
 }
 function nextGame() {
   modal.style = "display:none !important;"
