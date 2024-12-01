@@ -2,93 +2,146 @@ const board = document.querySelector("#board");
 const reinicio = document.querySelector("#restart");
 const boardItem = document.querySelectorAll(".board_item");
 const turnPlayer = document.querySelector('.turn')
-let jugadorActual = true;
+let currentPlayer = "player";
 const modal = document.querySelector(".modal");
 const quit = document.querySelector('#quit')
 const score = document.querySelector('#score')
 const score2 = document.querySelector('#score2')
 const nextRound = document.querySelector('#nextRound')
-let x = `<svg class="icon cross">
-<use xlink:href="./icons/icon-x.svg#icon-x"></use>
+let player = `<svg class="icon cross">
+<use  xlink:href="./icons/icon-x.svg#icon-x"></use>
 </svg>`;
-
 let o = ` <svg class="icon circle">
 <use  xlink:href="./icons/icon-o.svg#icon-o"></use>
 </svg>`;
 
-for (let i = 0; i < boardItem.length; i++) {
-  boardItem[i].addEventListener("click", boardtTable);
-}
-function boardtTable(e) {
-  let clickAction = e.target.innerHTML;
-  if (!clickAction.length) {
-    e.target.innerHTML = jugadorActual ? x : o;
-    jugadorActual = !jugadorActual;
-    turn(jugadorActual)
-    winPlayer(0, 1, 2, jugadorActual);
-    winPlayer(3, 4, 5, jugadorActual);
-    winPlayer(6, 7, 8, jugadorActual);
-    winPlayer(0, 3, 6, jugadorActual);
-    winPlayer(1, 4, 7, jugadorActual);
-    winPlayer(2, 5, 8, jugadorActual);
-    winPlayer(0, 4, 8, jugadorActual);
-    winPlayer(2, 4, 6, jugadorActual);
+let pauseGame = false
+let gameStart = false
+
+const inputCells = ['', '', '', '', '', '', '', '', '',]
+
+const windCondition = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6]
+]
+
+boardItem.forEach((item, index) => {
+  item.addEventListener('click', () => {
+    if(currentPlayer === "player")
+    tapItem(item, index)
+  })
+})
+
+
+function tapItem(item, index) {
+  if (item.innerHTML === "" && !pauseGame) {
+    gameStart = false
+    updateItem(item, index, player)
+    if (!winner()) {
+      currentPlayer = "cpu";
+      randomItem()
+    }
   }
 }
-function winPlayer(celda1, celda2, celda3, jugadorActual) {
-  if (boardItem[celda1].innerHTML.length &&
-    boardItem[celda1].innerHTML === boardItem[celda2].innerHTML &&
-     boardItem[celda2].innerHTML === boardItem[celda3].innerHTML) {
-       ganadorModal(jugadorActual)
-       nextRoundGame(jugadorActual)
-    }
-      
+function updateItem(item, index, turnPlayer) {
+  item.innerHTML = turnPlayer
+  inputCells[index] = turnPlayer
+  turn(turnPlayer)
 }
- function limpiarTablero() {
+
+/* function changePlayer() {
+  player = player === `<svg class="icon cross">
+  <use  xlink:href="./icons/icon-x.svg#icon-x"></use>
+  </svg>`? o : `<svg class="icon cross">
+  <use  xlink:href="./icons/icon-x.svg#icon-x"></use>
+  </svg>`;
+
+} */
+function randomItem() {
+  pauseGame = true
+  let cpuClick;
+  setTimeout(() => {
+    do {
+      cpuClick = Math.floor(Math.random() * inputCells.length)
+    } while (inputCells[cpuClick] !== "");
+    updateItem(boardItem[cpuClick], cpuClick, o)
+    if (!winner()) {
+      currentPlayer = "player";
+    }
+    pauseGame = false
+  }, 300)
+
+}
+
+function winner() {
+  for (let i = 0; i < windCondition.length; i++) {
+    let [a,b,c] = windCondition[i]
+    if ( inputCells[a] !== "" && inputCells[a] === inputCells[b] && inputCells[b] === inputCells[c] ) {
+      ganadorModal(inputCells[a])
+    }
+  }
+ /*  windCondition.forEach((element) => {
+    let [a, b, c] = element
+    if ( inputCells[a] !== "" && inputCells[a] === inputCells[b] && inputCells[b] === inputCells[c] ) {
+      ganadorModal(inputCells[a])
+      
+      return true
+    }
+  }) */
+}
+
+function limpiarTablero() {
+  pauseGame = false
+  gameStart = false
   boardItem.forEach((element) => {
-      element.innerHTML = ""
+    element.innerHTML = ""
   })
 }
-function ganadorModal(value) {
+function ganadorModal(turnPlayer) {
   modal.style = " display:block !important;"
-  if(value === false){
+  nextRoundGame(turnPlayer)
+  if (turnPlayer === player) {
     document.querySelector('#winner').innerHTML = `<use xlink:href="./icons/icon-x.svg#icon-x"></use>`
-  } else { 
+  } else if (turnPlayer === o) {
     document.querySelector('#winner').innerHTML = `<use class="icon circle" xlink:href="./icons/icon-o.svg#icon-o"></use>`
+
   }
+  
 }
 
 function quitModal() {
+  
   modal.style = "display:none !important;"
   limpiarTablero()
 }
-function nextGame() {
+function nextRoundQuitModal() {
   modal.style = "display:none !important;"
   nextRoundGame()
   limpiarTablero()
 }
 
-function turn(value){
-  if(value === false){
+function turn(value) {
+  if (value === player) {
     turnPlayer.innerHTML = ` <svg class="icon">
           <use xlink:href="./icons/icon-o.svg#icon-o"></use>
         </svg><span>TURN</span>`
-  } else { 
+  } else {
     turnPlayer.innerHTML = ` <svg class="icon">
           <use xlink:href="./icons/icon-x.svg#icon-x"></use>
         </svg> <span>TURN</span>`
   }
 }
 
-function nextRoundGame(value){
-  if(value === false){
-   score.textContent += 1  
-  } else if(value === true) { 
-    score2.textContent += 1
+function nextRoundGame(turnPlayer) {
+  if (turnPlayer === player) {
+    score.textContent = parseInt(score.textContent) + 1
+  } else if (turnPlayer === o) {
+    score2.textContent = parseInt(score2.textContent) + 1
   }
 }
-turn()
+
 limpiarTablero()
 reinicio.addEventListener('click', limpiarTablero)
 quit.addEventListener('click', quitModal)
-nextRound.addEventListener('click', nextGame)
+nextRound.addEventListener('click', nextRoundQuitModal) 
