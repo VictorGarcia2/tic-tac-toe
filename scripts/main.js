@@ -31,6 +31,7 @@ boardItem.forEach((item, index) => {
   item.addEventListener('click', () => {
     if(currentPlayer === "player")
     tapItem(item, index)
+
   })
 })
 function tapItem(item, index) {
@@ -47,6 +48,7 @@ function updateItem(item, index, turnPlayer) {
   item.innerHTML = turnPlayer
   inputCells[index] = turnPlayer
   turn(turnPlayer)
+
 }
 function randomItem() {
   pauseGame = true
@@ -67,14 +69,16 @@ function randomItem() {
 function winner() {
   for (let i = 0; i < windCondition.length; i++) {
     let [a,b,c] = windCondition[i]
+    
     if ( inputCells[a] !== "" && inputCells[a] === inputCells[b] && inputCells[b] === inputCells[c] ) {
-      ganadorModal(inputCells[a,b,c])
+      ganadorModal(inputCells[a])
+     
       return true
     } 
   }
   if (inputCells.every(cell => cell !== '')) {
     scoreBoard()
-    return true
+    return true;
 }
 }
 
@@ -83,16 +87,17 @@ function limpiarTablero() {
     element.innerHTML = ""
   })
   inputCells.fill('') 
+  pauseGame = false
+  gameStart = false
 }
 function ganadorModal(turnPlayer) {
   modal.style = " display:block !important; display:flex !important; align-items:center !important;"
+  currentPlayer = "player"; // Reinicia al jugador humano.
   nextRoundGame(turnPlayer)
   if (turnPlayer === player) {
     document.querySelector('#winner').innerHTML = `<use xlink:href="./icons/icon-x.svg#icon-x"></use>`
-    pauseGame = false
   } else if (turnPlayer === o) {
     document.querySelector('#winner').innerHTML = `<use class="icon circle" xlink:href="./icons/icon-o.svg#icon-o"></use>`
-    pauseGame = true
   }
   
 }
@@ -114,14 +119,13 @@ function turn(value) {
   }
 }
 function scoreBoard() {
-    scoreBoardTie.textContent + 1
-    pauseGame = true
+  scoreBoardTie.textContent = parseInt(scoreBoardTie.textContent) + 1;
+    pauseGame = false
  
 }
 function nextRoundGame(turnPlayer) {
   if (turnPlayer === player) {
     scoreBoardX.textContent = parseFloat(scoreBoardX.textContent) + 1
-    pauseGame = true
   } else if (turnPlayer === o) {
     scoreBoardO.textContent = parseInt(scoreBoardO.textContent) + 1
   }
