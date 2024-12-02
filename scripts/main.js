@@ -36,10 +36,10 @@ boardItem.forEach((item, index) => {
 
 function tapItem(item, index) {
   if (item.innerHTML === "" && !pauseGame) {
-    gameStart = false
+    gameStart = true
     updateItem(item, index, player)
     if (!winner()) {
-      currentPlayer = "cpu";
+      currentPlayer = "compu";
       randomItem()
     }
   }
@@ -70,7 +70,7 @@ function randomItem() {
       currentPlayer = "player";
     }
     pauseGame = false
-  }, 300)
+  }, 400)
 
 }
 
@@ -78,25 +78,20 @@ function winner() {
   for (let i = 0; i < windCondition.length; i++) {
     let [a,b,c] = windCondition[i]
     if ( inputCells[a] !== "" && inputCells[a] === inputCells[b] && inputCells[b] === inputCells[c] ) {
-      ganadorModal(inputCells[a])
-    }
-  }
- /*  windCondition.forEach((element) => {
-    let [a, b, c] = element
-    if ( inputCells[a] !== "" && inputCells[a] === inputCells[b] && inputCells[b] === inputCells[c] ) {
-      ganadorModal(inputCells[a])
-      
+      ganadorModal(inputCells[a,b,c])
       return true
-    }
-  }) */
+    } 
+  }
+  if (inputCells.every(cell => cell !== '')) {
+    return true
+}
 }
 
 function limpiarTablero() {
-  pauseGame = false
-  gameStart = false
   boardItem.forEach((element) => {
     element.innerHTML = ""
   })
+  inputCells.fill('') 
 }
 function ganadorModal(turnPlayer) {
   modal.style = " display:block !important;"
@@ -110,15 +105,12 @@ function ganadorModal(turnPlayer) {
   
 }
 
-function quitModal() {
-  
-  modal.style = "display:none !important;"
-  limpiarTablero()
-}
+
 function nextRoundQuitModal() {
   modal.style = "display:none !important;"
-  nextRoundGame()
+  pauseGame = true
   limpiarTablero()
+  nextRoundGame()
 }
 
 function turn(value) {
@@ -132,16 +124,24 @@ function turn(value) {
         </svg> <span>TURN</span>`
   }
 }
-
 function nextRoundGame(turnPlayer) {
   if (turnPlayer === player) {
-    score.textContent = parseInt(score.textContent) + 1
+    score.textContent = parseFloat(score.textContent) + 1
+
   } else if (turnPlayer === o) {
     score2.textContent = parseInt(score2.textContent) + 1
+   
   }
 }
-
-limpiarTablero()
+function quitModal() {
+  modal.style = "display:none !important;"
+  limpiarTablero()
+  inputCells.fill('')
+  score.textContent = 0
+  score2.textContent = 0
+  pauseGame = false
+  gameStart = false
+}
 reinicio.addEventListener('click', limpiarTablero)
 quit.addEventListener('click', quitModal)
 nextRound.addEventListener('click', nextRoundQuitModal) 
