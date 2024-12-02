@@ -5,8 +5,9 @@ const turnPlayer = document.querySelector('.turn')
 let currentPlayer = "player";
 const modal = document.querySelector(".modal");
 const quit = document.querySelector('#quit')
-const score = document.querySelector('#score')
-const score2 = document.querySelector('#score2')
+const scoreBoardX = document.querySelector('#score-board-x')
+const scoreBoardO = document.querySelector('#score-board-o')
+const scoreBoardTie = document.querySelector('#score-board-tie')
 const nextRound = document.querySelector('#nextRound')
 let player = `<svg class="icon cross">
 <use  xlink:href="./icons/icon-x.svg#icon-x"></use>
@@ -32,8 +33,6 @@ boardItem.forEach((item, index) => {
     tapItem(item, index)
   })
 })
-
-
 function tapItem(item, index) {
   if (item.innerHTML === "" && !pauseGame) {
     gameStart = true
@@ -49,15 +48,6 @@ function updateItem(item, index, turnPlayer) {
   inputCells[index] = turnPlayer
   turn(turnPlayer)
 }
-
-/* function changePlayer() {
-  player = player === `<svg class="icon cross">
-  <use  xlink:href="./icons/icon-x.svg#icon-x"></use>
-  </svg>`? o : `<svg class="icon cross">
-  <use  xlink:href="./icons/icon-x.svg#icon-x"></use>
-  </svg>`;
-
-} */
 function randomItem() {
   pauseGame = true
   let cpuClick;
@@ -83,6 +73,7 @@ function winner() {
     } 
   }
   if (inputCells.every(cell => cell !== '')) {
+    scoreBoard()
     return true
 }
 }
@@ -94,21 +85,19 @@ function limpiarTablero() {
   inputCells.fill('') 
 }
 function ganadorModal(turnPlayer) {
-  modal.style = " display:block !important;"
+  modal.style = " display:block !important; display:flex !important; align-items:center !important;"
   nextRoundGame(turnPlayer)
   if (turnPlayer === player) {
     document.querySelector('#winner').innerHTML = `<use xlink:href="./icons/icon-x.svg#icon-x"></use>`
+    pauseGame = false
   } else if (turnPlayer === o) {
     document.querySelector('#winner').innerHTML = `<use class="icon circle" xlink:href="./icons/icon-o.svg#icon-o"></use>`
-
+    pauseGame = true
   }
   
 }
-
-
 function nextRoundQuitModal() {
   modal.style = "display:none !important;"
-  pauseGame = true
   limpiarTablero()
   nextRoundGame()
 }
@@ -124,21 +113,25 @@ function turn(value) {
         </svg> <span>TURN</span>`
   }
 }
+function scoreBoard() {
+    scoreBoardTie.textContent + 1
+    pauseGame = true
+ 
+}
 function nextRoundGame(turnPlayer) {
   if (turnPlayer === player) {
-    score.textContent = parseFloat(score.textContent) + 1
-
+    scoreBoardX.textContent = parseFloat(scoreBoardX.textContent) + 1
+    pauseGame = true
   } else if (turnPlayer === o) {
-    score2.textContent = parseInt(score2.textContent) + 1
-   
+    scoreBoardO.textContent = parseInt(scoreBoardO.textContent) + 1
   }
 }
 function quitModal() {
-  modal.style = "display:none !important;"
+  modal.style = "display:none !important; "
   limpiarTablero()
   inputCells.fill('')
-  score.textContent = 0
-  score2.textContent = 0
+  scoreBoardX.textContent = 0
+  scoreBoardO.textContent = 0
   pauseGame = false
   gameStart = false
 }

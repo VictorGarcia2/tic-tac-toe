@@ -102,11 +102,12 @@ header>button>.icon {
     height: 40%;
     width: 40%;
 }
-
+ 
 .icon.circle {
     fill: var(--yellow);
     height: 50%;
     width: 50%;
+   
 }
 
 .modal-content {
