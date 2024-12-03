@@ -93,7 +93,7 @@ function limpiarTablero() {
 }
 function ganadorModal(turnPlayer) {
   modal.style = " display:block !important; display:flex !important; align-items:center !important;"
-  currentPlayer = "player"; // Reinicia al jugador humano.
+  currentPlayer = "player"; 
   nextRoundGame(turnPlayer)
   if (turnPlayer === player) {
     document.querySelector('#winner').innerHTML = `<use xlink:href="./icons/icon-x.svg#icon-x"></use>`
