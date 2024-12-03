@@ -4,6 +4,7 @@ const boardItem = document.querySelectorAll(".board_item");
 const turnPlayer = document.querySelector('.turn')
 let currentPlayer = "player";
 const modal = document.querySelector(".modal");
+const modalTie = document.querySelector(".modal-tie");
 const quit = document.querySelector('#quit')
 const scoreBoardX = document.querySelector('#score-board-x')
 const scoreBoardO = document.querySelector('#score-board-o')
@@ -121,6 +122,7 @@ function turn(value) {
 function scoreBoard() {
   scoreBoardTie.textContent = parseInt(scoreBoardTie.textContent) + 1;
     pauseGame = false
+    limpiarTablero()
  
 }
 function nextRoundGame(turnPlayer) {
